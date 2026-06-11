@@ -113,14 +113,14 @@ def update_staff(data_list):
             item['day']=day
             item['allowance']=allowance
             item['total_income']=total_income
-            item['total_income']=total_income
+            item['income_classification']=income_classification
             
 
             print("[Thành công]: Đã cập nhật trạng thái sang ĐÃ XỬ LÝ!")
             break
     else:
         print("[Lỗi]: Không tìm thấy mã ID yêu cầu!")
-def remove_item(data_list):
+def remove_staff(data_list):
     print("\n--- XÓA ĐỐI TƯỢNG KHỎI HỆ THỐNG ---")
     if not data_list:
         print("[Thông báo]: Danh sách rỗng!")
@@ -128,9 +128,18 @@ def remove_item(data_list):
     search_id = validate_input("Nhập mã ID cần xóa: ")
     for item in data_list:
         if search_id.lower() == item.get("id").lower():
-            data_list.remove(item)
-            print(f"[Thành công]: Đã xóa dữ liệu liên quan đến ID {search_id}!")
-            break
+            check=validate_input("Bạn có chắc chắn muốn xóa nhân viên này không?(Y/N): ").strip
+            if check== 'Y' or check =='y':
+                data_list.remove(item)
+                print(f"[Thành công]: Đã xóa dữ liệu liên quan đến ID {search_id}!")
+                break
+            elif check == 'N' or check== 'n' :
+                print("Bạn dừng chức năng xóa thành công!")
+                break
+            else:
+                print("Lựa chọn sai!")
+                continue
+                
     else:
         print("[Lỗi]: Không tìm thấy mã ID yêu cầu để xóa!")
     
@@ -147,21 +156,25 @@ def search_item(data_list):
     if not results:
         print("[Thông báo]: Không tìm thấy kết quả nào phù hợp!")
     else:
-        display_all(results)
+        display_staff(results)
         
 def chart_item(data_list):
-    print("\n--- THỐNG KÊ SỐ LƯỢNG PHÂN LOẠI ---")
+    print("\n--- PHÂN LOẠI THU NHẬP TỰ ĐỘNG ---")
     count_a = 0
     count_b = 0
     count_c = 0
+    count_d = 0
     for item in data_list:
-        rank = item.get("rank")
-        if rank == "Loại A": count_a += 1
-        elif rank == "Loại B": count_b += 1
-        elif rank == "Loại C": count_c += 1
-    print(f"Số lượng thuộc Loại A: {count_a}")
-    print(f"Số lượng thuộc Loại B: {count_b}")
-    print(f"Số lượng thuộc Loại C: {count_c}")
+        income_classification = item.get("income_classification")
+        if  income_classification == "Thấp": count_a += 1
+        elif income_classification == "Trung Bình": count_b += 1
+        elif income_classification == "Khá": count_c += 1
+        elif income_classification == "Cao": count_d += 1
+    print(f"Số lượng thuộc Loại Thấp: {count_a}")
+    print(f"Số lượng thuộc Loại Trung Bình: {count_b}")
+    print(f"Số lượng thuộc Loại Khá: {count_c}")
+    print(f"Số lượng thuộc Loại Cao: {count_d}")
+
 
 def main():
     while True:
@@ -183,6 +196,12 @@ def main():
                 add_staff(staffs)
             case '3':
                 update_staff(staffs)
+            case '4':
+                remove_staff(staffs)
+            case '5':
+                search_item(staffs)
+            case '7':
+                chart_item(staffs)
             case '8':
                 print("Bạn đã thoát chương trình")
             case _:
